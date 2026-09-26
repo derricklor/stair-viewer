@@ -19,7 +19,7 @@ function RightPanel() {
   };
 
   return (
-    <aside className="absolute right-0 top-0 bottom-0 w-80 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
+    <aside id="right-panel" className="absolute right-0 top-0 bottom-0 w-80 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700 flex items-center justify-between">
         <h2 className="text-white font-semibold text-lg">Properties</h2>
         <div className="flex items-center gap-2">

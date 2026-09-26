@@ -11,7 +11,7 @@ function LeftPanel() {
   ];
 
   return (
-    <aside className="absolute left-0 top-0 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
+    <aside id="left-panel" className="absolute left-0 top-0 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <h2 className="text-white font-semibold text-lg">Components</h2>
       </div>
