@@ -3,13 +3,16 @@ import { IconEye, IconEyeOff, IconLock, IconUnlock, IconLayers, IconTrash2, Icon
 
 const layerTypes = ['Mesh', 'Light', 'Camera', 'Group'];
 
-function LayersPanel() {
+function LayersPanel({ boxSize = { width: 1, height: 1, depth: 1 }, onBoxSizeChange }) {
   const [layers, setLayers] = useState([
     { id: 1, name: 'Box', type: 'Mesh', visible: true, locked: false },
-    { id: 2, name: 'Light 1', type: 'Light', visible: true, locked: false },
-    { id: 3, name: 'Light 2', type: 'Light', visible: true, locked: false },
   ]);
   const [selectedLayerId, setSelectedLayerId] = useState(1);
+  const [boxDimensions, setBoxDimensions] = useState({
+    width: boxSize.width,
+    height: boxSize.height,
+    depth: boxSize.depth,
+  });
 
   return (
     <aside id="layers-panel" className="absolute left-64 top-0 bottom-0 w-56 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
@@ -93,7 +96,7 @@ function LayersPanel() {
 
         <div className="mt-4 p-3 bg-gray-800 rounded-lg">
           <h3 className="text-gray-400 text-xs font-medium mb-2">Layer Properties</h3>
-          <div className="space-y-2 text-sm">
+          <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-500">Type</span>
               <span className="text-gray-300">{layerTypes.find((t) => t === layers.find((l) => l.id === selectedLayerId)?.type)}</span>
@@ -102,6 +105,48 @@ function LayersPanel() {
               <span className="text-gray-500">Order</span>
               <span className="text-gray-300">{layers.length}</span>
             </div>
+            {layers.find((l) => l.id === selectedLayerId)?.type === 'Mesh' && (
+              <>
+                <div className="pt-2 border-t border-gray-700">
+                  <h4 className="text-gray-300 text-xs font-medium mb-2">Box Dimensions</h4>
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-gray-500 text-[10px] block mb-1">Width</label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        step="0.1"
+                        value={boxDimensions.width}
+                        onChange={(e) => setBoxDimensions(prev => ({ ...prev, width: parseFloat(e.target.value) || 1 }))}
+                        className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-gray-500 text-[10px] block mb-1">Height</label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        step="0.1"
+                        value={boxDimensions.height}
+                        onChange={(e) => setBoxDimensions(prev => ({ ...prev, height: parseFloat(e.target.value) || 1 }))}
+                        className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-gray-500 text-[10px] block mb-1">Depth</label>
+                      <input
+                        type="number"
+                        min="0.1"
+                        step="0.1"
+                        value={boxDimensions.depth}
+                        onChange={(e) => setBoxDimensions(prev => ({ ...prev, depth: parseFloat(e.target.value) || 1 }))}
+                        className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

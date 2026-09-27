@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Box() {
+function Box({ size = { width: 1, height: 1, depth: 1 } }) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -10,7 +10,7 @@ function Box() {
       castShadow
       receiveShadow
     >
-      <boxGeometry args={[1, 1, 1]} />
+      <boxGeometry args={[size.width, size.height, size.depth]} />
       <meshStandardMaterial
         color={hovered ? 0x3b82f6 : 0x0f3460}
         roughness={0.5}

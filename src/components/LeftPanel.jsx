@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { IconPlus, IconCube, IconBox, IconCircle, IconCylinder } from './Icon.jsx';
+import { IconPlus, IconBox } from './Icon.jsx';
 
-function LeftPanel() {
+function LeftPanel({ boxSize = { width: 1, height: 1, depth: 1 } }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const componentTypes = [
-    { id: 'box', name: 'Box', icon: <IconCube size={18} /> },
-    { id: 'sphere', name: 'Sphere', icon: <IconCircle size={18} /> },
-    { id: 'cylinder', name: 'Cylinder', icon: <IconCylinder size={18} /> },
+    { id: 'box', name: 'Box', icon: <IconBox size={18} /> },
   ];
 
   return (

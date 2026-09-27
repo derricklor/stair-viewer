@@ -3,7 +3,7 @@ import { OrbitControls, Environment } from '@react-three/drei';
 import { Suspense, useEffect } from 'react';
 import Box from './Box.jsx';
 
-function Scene() {
+function Scene({ boxSize = { width: 1, height: 1, depth: 1 } }) {
   useEffect(() => {
     // Set up Three.js scene with soft downward lighting
     // This is handled by React Three Fiber's Canvas component
@@ -26,13 +26,13 @@ function Scene() {
           
           <Environment preset="city" />
           
-          <Box />
+          <Box size={boxSize} />
           
           <OrbitControls
             enableDamping
             dampingFactor={0.05}
             autoRotate
-            autoRotateSpeed={2}
+            autoRotateSpeed={0.5}
           />
         </Suspense>
       </Canvas>
