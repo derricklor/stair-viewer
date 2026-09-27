@@ -1,27 +1,13 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
-import { Suspense, useEffect, useMemo } from 'react';
+import { Suspense, useEffect } from 'react';
 import Box from './Box.jsx';
 
-function Scene() {
+function Scene({ objects = [] }) {
   useEffect(() => {
     // Set up Three.js scene with soft downward lighting
     // This is handled by React Three Fiber's Canvas component
   }, []);
-
-  // Memoize objects to prevent unnecessary re-renders
-  const objects = useMemo(() => [
-    {
-      id: 1,
-      name: 'Box',
-      type: 'Mesh',
-      meshSize: { width: 1, height: 1, depth: 1 },
-      transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
-      material: { color: 0x0f3460 },
-      visible: true,
-      locked: false,
-    },
-  ], []);
 
   return (
     <div className="w-full h-full">

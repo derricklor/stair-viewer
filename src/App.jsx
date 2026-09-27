@@ -76,7 +76,7 @@ function App() {
     <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
       {/* Scene - behind all panels */}
       <div className="w-full h-full absolute inset-0 z-0">
-        <Scene />
+        <Scene objects={objects} />
       </div>
       
       {/* Left Panel */}
