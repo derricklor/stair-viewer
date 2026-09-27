@@ -1,18 +1,30 @@
 import { useState } from 'react';
 
-function Box({ size = { width: 1, height: 1, depth: 1 } }) {
+function Box({ 
+  size = { width: 1, height: 1, depth: 1 }, 
+  position = [0, 0, 0], 
+  rotation = [0, 0, 0], 
+  scale = [1, 1, 1],
+  color = 0x0f3460,
+  visible = true,
+  locked = false
+}) {
   const [hovered, setHovered] = useState(false);
+
+  if (!visible) return null;
 
   return (
     <mesh
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
+      position={position}
+      rotation={rotation}
+      scale={scale}
+      visible={visible}
       castShadow
       receiveShadow
     >
       <boxGeometry args={[size.width, size.height, size.depth]} />
       <meshStandardMaterial
-        color={hovered ? 0x3b82f6 : 0x0f3460}
+        color={hovered ? 0x3b82f6 : color}
         roughness={0.5}
         metalness={0.1}
       />

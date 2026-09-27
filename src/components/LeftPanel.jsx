@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { IconPlus, IconBox } from './Icon.jsx';
 
-function LeftPanel({ boxSize = { width: 1, height: 1, depth: 1 } }) {
+const DEFAULT_BOX_SIZE = { width: 1, height: 1, depth: 1 };
+
+function LeftPanel({ onAddObject = () => {} }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const componentTypes = [
@@ -19,7 +21,10 @@ function LeftPanel({ boxSize = { width: 1, height: 1, depth: 1 } }) {
           {componentTypes.map((type) => (
             <button
               key={type.id}
-              onClick={() => setSelectedType(type.id)}
+              onClick={() => {
+                setSelectedType(type.id);
+                onAddObject(type.id);
+              }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 selectedType === type.id
                   ? 'bg-blue-600 text-white'

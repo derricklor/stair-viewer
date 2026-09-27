@@ -1,13 +1,27 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useMemo } from 'react';
 import Box from './Box.jsx';
 
-function Scene({ boxSize = { width: 1, height: 1, depth: 1 } }) {
+function Scene() {
   useEffect(() => {
     // Set up Three.js scene with soft downward lighting
     // This is handled by React Three Fiber's Canvas component
   }, []);
+
+  // Memoize objects to prevent unnecessary re-renders
+  const objects = useMemo(() => [
+    {
+      id: 1,
+      name: 'Box',
+      type: 'Mesh',
+      meshSize: { width: 1, height: 1, depth: 1 },
+      transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
+      material: { color: 0x0f3460 },
+      visible: true,
+      locked: false,
+    },
+  ], []);
 
   return (
     <div className="w-full h-full">
@@ -26,7 +40,18 @@ function Scene({ boxSize = { width: 1, height: 1, depth: 1 } }) {
           
           <Environment preset="city" />
           
-          <Box size={boxSize} />
+          {objects.map(obj => (
+            <Box
+              key={obj.id}
+              size={obj.meshSize}
+              position={obj.transform.position}
+              rotation={obj.transform.rotation}
+              scale={obj.transform.scale}
+              color={obj.material.color}
+              visible={obj.visible}
+              locked={obj.locked}
+            />
+          ))}
           
           <OrbitControls
             enableDamping
