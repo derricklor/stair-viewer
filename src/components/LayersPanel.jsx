@@ -9,21 +9,11 @@ function LayersPanel({
   onSelectObject,
   onToggleVisibility,
   onToggleLock,
-  onUpdateProperty
+  onUpdateProperty,
+  onDeleteObject
 }) {
-  const [expandedObjects, setExpandedObjects] = useState(new Set([objects[0]?.id || 0]));
+  
 
-  const toggleExpand = (objectId) => {
-    setExpandedObjects(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(objectId)) {
-        newSet.delete(objectId);
-      } else {
-        newSet.add(objectId);
-      }
-      return newSet;
-    });
-  };
 
   const selectedObject = objects.find(obj => obj.id === selectedObjectId);
 
@@ -92,106 +82,23 @@ function LayersPanel({
                     </div>
                   </div>
 
-                  {/* Expand/Collapse */}
+                  {/* Delete Button */}
                   <button
-                    className="p-1 rounded hover:bg-gray-600 opacity-50 hover:opacity-100 transition-all"
+                    className={`p-1 rounded hover:bg-gray-600 transition-all ${
+                      obj.locked ? 'text-gray-500' : 'text-white'
+                    }`}
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleExpand(obj.id);
+                      onDeleteObject(obj.id);
                     }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d={expandedObjects.has(obj.id) ? "M18 15L12 9l-6 6" : "M6 9l6-6 6 6"} />
-                    </svg>
+                    <IconTrash2 size={14} />
                   </button>
                 </div>
               ))}
             </div>
 
-            {/* Selected Object Properties */}
-            {selectedObject && expandedObjects.has(selectedObject.id) && (
-              <div className="mt-4 p-3 bg-gray-800 rounded-lg">
-                <h3 className="text-gray-400 text-xs font-medium mb-3 flex items-center justify-between">
-                  <span>Object Properties</span>
-                  <span className="text-gray-600 text-[10px]">{selectedObject.type}</span>
-                </h3>
-                
-                {selectedObject.type === 'Mesh' && (
-                  <>
-                    <h4 className="text-gray-300 text-xs font-medium mb-2">Dimensions</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Width (X)</label>
-                        <input
-                          type="number"
-                          min="0.1"
-                          step="0.1"
-                          value={selectedObject.meshSize.width}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'meshSize', { ...selectedObject.meshSize, width: parseFloat(e.target.value) || 1 })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Height (Y)</label>
-                        <input
-                          type="number"
-                          min="0.1"
-                          step="0.1"
-                          value={selectedObject.meshSize.height}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'meshSize', { ...selectedObject.meshSize, height: parseFloat(e.target.value) || 1 })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Depth (Z)</label>
-                        <input
-                          type="number"
-                          min="0.1"
-                          step="0.1"
-                          value={selectedObject.meshSize.depth}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'meshSize', { ...selectedObject.meshSize, depth: parseFloat(e.target.value) || 1 })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                    </div>
-                    
-                    <h4 className="text-gray-300 text-xs font-medium mb-2 mt-4 pt-2 border-t border-gray-700">Transform</h4>
-                    <div className="space-y-3">
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Position X</label>
-                        <input
-                          type="number"
-                          step="0.1"
-                          value={selectedObject.transform.position[0]}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'transform', { ...selectedObject.transform, position: [parseFloat(e.target.value) || 0, selectedObject.transform.position[1], selectedObject.transform.position[2]] })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Position Y</label>
-                        <input
-                          type="number"
-                          step="0.1"
-                          value={selectedObject.transform.position[1]}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'transform', { ...selectedObject.transform, position: [selectedObject.transform.position[0], parseFloat(e.target.value) || 0, selectedObject.transform.position[2]] })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-gray-500 text-[10px] block mb-1">Position Z</label>
-                        <input
-                          type="number"
-                          step="0.1"
-                          value={selectedObject.transform.position[2]}
-                          onChange={(e) => onUpdateProperty(selectedObject.id, 'transform', { ...selectedObject.transform, position: [selectedObject.transform.position[0], selectedObject.transform.position[1], parseFloat(e.target.value) || 0] })}
-                          className="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-blue-500"
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+            
           </>
         )}
       </div>
