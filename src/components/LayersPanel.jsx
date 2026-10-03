@@ -103,29 +103,7 @@ function LayersPanel({
         )}
       </div>
 
-      <div className="p-4 border-t border-gray-700">
-        <button
-          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all flex items-center justify-center gap-2"
-          onClick={() => {
-            const newId = Math.max(...objects.map(o => o.id)) + 1;
-            const newObject = {
-              id: newId,
-              name: 'Box',
-              type: 'Mesh',
-              meshSize: { width: 1, height: 1, depth: 1 },
-              transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
-              material: { color: 0x0f3460 },
-              visible: true,
-              locked: false,
-            };
-            // This should trigger a callback from parent to add object
-            onSelectObject(newId);
-          }}
-        >
-          <IconPlus size={16} />
-          Add Layer
-        </button>
-      </div>
+      
     </aside>
   );
 }
