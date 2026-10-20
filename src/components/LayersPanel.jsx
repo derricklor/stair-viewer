@@ -15,7 +15,9 @@ function LayersPanel({
   
 
 
-  const selectedObject = objects.find(obj => obj.id === selectedObjectId);
+  // If selectedObjectId is null and there are objects, select the first one
+  const effectiveSelectedId = selectedObjectId || (objects.length > 0 ? objects[0].id : null);
+  const selectedObject = objects.find(obj => obj.id === effectiveSelectedId);
 
   return (
     <aside id="layers-panel" className="absolute left-64 top-0 h-1/2 bottom-0 w-56 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
@@ -39,7 +41,7 @@ function LayersPanel({
                 <div
                   key={obj.id}
                   className={`relative flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all ${
-                    selectedObjectId === obj.id
+                    effectiveSelectedId === obj.id
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
                   }`}

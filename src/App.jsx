@@ -44,7 +44,7 @@ function App() {
 
   // Add new object with type-specific defaults and offset logic
   const addObject = useCallback((typeId = 'box') => {
-    const newId = Math.max(...objects.map(o => o.id)) + 1;
+    const newId = objects.length > 0 ? Math.max(...objects.map(o => o.id)) + 1 : 1;
     const size = getDefaultSize(typeId);
 
     if (objects.length === 0) {
@@ -123,8 +123,16 @@ function App() {
 
   // delete object
     const deleteObject = useCallback((objectId) => {
-        setObjects(objects.filter(obj => obj.id !== objectId));
-    }, [objects]);
+    const newObjects = objects.filter(obj => obj.id !== objectId);
+    // If deleting the last object, clear selectedObjectId
+    if (newObjects.length === 0) {
+      setSelectedObjectId(null);
+    } else if (objectId === selectedObjectId) {
+      // If selected object was deleted, select the first remaining object
+      setSelectedObjectId(newObjects[0].id);
+    }
+    setObjects(newObjects);
+  }, [objects, selectedObjectId]);
 
   // Get selected object
   const selectedObject = objects.find(obj => obj.id === selectedObjectId);
