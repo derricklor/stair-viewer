@@ -18,7 +18,7 @@ function LayersPanel({
   const selectedObject = objects.find(obj => obj.id === selectedObjectId);
 
   return (
-    <aside id="layers-panel" className="absolute left-64 top-0 bottom-0 w-56 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
+    <aside id="layers-panel" className="absolute left-64 top-0 h-1/2 bottom-0 w-56 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <h2 className="text-white font-semibold text-lg flex items-center gap-2">
           <IconLayers size={18} />
