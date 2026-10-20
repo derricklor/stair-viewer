@@ -1,14 +1,31 @@
 import { useState } from 'react';
-import { IconPlus, IconBox } from './Icon.jsx';
+import { IconPlus, IconBox, IconRiser, IconTread } from './Icon.jsx';
 
-const DEFAULT_BOX_SIZE = { width: 1, height: 1, depth: 1 };
+const DEFAULT_SIZE = {
+  box: { width: 1, height: 1, depth: 1 },
+  riser: { width: 1, height: 1, depth: 0.5 },
+  tread: { width: 1, height: 0.5, depth: 1 },
+};
 
 function LeftPanel({ onAddObject = () => {} }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const componentTypes = [
     { id: 'box', name: 'Box', icon: <IconBox size={18} /> },
+    { id: 'riser', name: 'Riser', icon: <IconRiser size={18} /> },
+    { id: 'tread', name: 'Tread', icon: <IconTread size={18} /> },
   ];
+
+  const getDefaultSize = (typeId) => DEFAULT_SIZE[typeId] || DEFAULT_SIZE.box;
+
+  const getTypeName = (typeId) => {
+    const names = { box: 'Box', riser: 'Riser', tread: 'Tread' };
+    return names[typeId] || 'Box';
+  };
+
+  const handleAddObject = (typeId) => {
+    onAddObject(typeId);
+  };
 
   return (
     <aside id="left-panel" className="absolute left-0 top-0 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
@@ -23,7 +40,7 @@ function LeftPanel({ onAddObject = () => {} }) {
               key={type.id}
               onClick={() => {
                 setSelectedType(type.id);
-                onAddObject(type.id);
+                handleAddObject(type.id);
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 selectedType === type.id
@@ -33,6 +50,9 @@ function LeftPanel({ onAddObject = () => {} }) {
             >
               {type.icon}
               <span>{type.name}</span>
+              <span className="text-gray-500 text-xs ml-auto">
+                {getDefaultSize(type.id).width}×{getDefaultSize(type.id).height}×{getDefaultSize(type.id).depth}
+              </span>
               {selectedType === type.id && (
                 <IconPlus size={14} className="ml-auto" />
               )}

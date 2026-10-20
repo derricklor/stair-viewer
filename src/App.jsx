@@ -4,7 +4,27 @@ import LeftPanel from './components/LeftPanel.jsx';
 import LayersPanel from './components/LayersPanel.jsx';
 import RightPanel from './components/RightPanel.jsx';
 
-const DEFAULT_BOX_SIZE = { width: 1, height: 1, depth: 1 };
+// Default sizes for different component types
+const DEFAULT_SIZE = {
+  box: { width: 1, height: 1, depth: 1 },
+  riser: { width: 1, height: 1, depth: 0.5 },
+  tread: { width: 1, height: 0.5, depth: 1 },
+};
+
+// Get default size for a type
+const getDefaultSize = (typeId) => DEFAULT_SIZE[typeId] || DEFAULT_SIZE.box;
+
+// Get name for a type
+const getTypeName = (typeId) => {
+  const names = { box: 'Box', riser: 'Riser', tread: 'Tread' };
+  return names[typeId] || 'Box';
+};
+
+// Get last object of a specific type
+const getLastOfType = (objects, typeId) => {
+  const typeObjects = objects.filter(obj => obj.name === getTypeName(typeId));
+  return typeObjects.length > 0 ? typeObjects[typeObjects.length - 1] : null;
+};
 
 function App() {
   const [objects, setObjects] = useState([
@@ -22,16 +42,17 @@ function App() {
 
   const [selectedObjectId, setSelectedObjectId] = useState(1);
 
-  // Add new object
+  // Add new object with type-specific defaults and offset logic
   const addObject = useCallback((typeId = 'box') => {
     const newId = Math.max(...objects.map(o => o.id)) + 1;
-    //check if there are any objects in the scene, if not, use default size
+    const size = getDefaultSize(typeId);
+
     if (objects.length === 0) {
       const newObject = {
         id: newId,
-        name: typeId === 'box' ? 'Box' : typeId,
+        name: getTypeName(typeId),
         type: 'Mesh',
-        meshSize: DEFAULT_BOX_SIZE,
+        meshSize: size,
         transform: { position: [0, 0, 0], rotation: [0, 0, 0], scale: [1, 1, 1] },
         material: { color: 0x0f3460 },
         visible: true,
@@ -42,22 +63,26 @@ function App() {
       return;
     }
 
-    // If there are existing objects, use the last object's size and position to determine the new object's properties
-
-    const lastObject = objects[objects.length - 1];
+    // Get last object of the same type for offset calculation
+    const lastOfType = getLastOfType(objects, typeId);
     const newObject = {
-        id: newId,
-        name: typeId === 'box' ? 'Box' : typeId,
-        type: 'Mesh',
-        meshSize: { width: lastObject.meshSize.width, 
-            height: lastObject.meshSize.height, 
-            depth: lastObject.meshSize.depth },
-    //take the last object and use its position, rotation, scale as the starting point for the new object 
-      transform: { position: [lastObject.transform.position[0], // stairs are not offset in width direction
-                        lastObject.transform.position[1] + lastObject.meshSize.height, // offset by height of last object
-                        lastObject.transform.position[2] + lastObject.meshSize.depth], // offset by depth of last object
-                    rotation: [0, 0, 0], 
-                    scale: [lastObject.transform.scale[0], lastObject.transform.scale[1], lastObject.transform.scale[2]] },
+      id: newId,
+      name: getTypeName(typeId),
+      type: 'Mesh',
+      meshSize: size,
+      // Offset logic: different for box, riser, and tread
+      transform: {
+        position: [
+          // X position stays at 0 (no offset in width direction)
+          0,
+          // Y position: offset by height for box and riser (vertical stacking)
+          (lastOfType?.transform.position[1] || 0) + size.height,
+          // Z position: offset by depth for box and tread (horizontal stacking)
+          (lastOfType?.transform.position[2] || 0) + size.depth,
+        ],
+        rotation: [0, 0, 0],
+        scale: [1, 1, 1],
+      },
       material: { color: 0x0f3460 },
       visible: true,
       locked: false,
