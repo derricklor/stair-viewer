@@ -3,6 +3,7 @@ import Scene from './components/Scene.jsx';
 import LeftPanel from './components/LeftPanel.jsx';
 import LayersPanel from './components/LayersPanel.jsx';
 import RightPanel from './components/RightPanel.jsx';
+import OrbitControlsPanel from './components/OrbitControlsPanel.jsx';
 
 // Default sizes for different component types
 const DEFAULT_SIZE = {
@@ -41,6 +42,8 @@ function App() {
   ]);
 
   const [selectedObjectId, setSelectedObjectId] = useState(1);
+  const [autoRotate, setAutoRotate] = useState(false);
+  const [autoRotateSpeed, setAutoRotateSpeed] = useState(0.5);
 
   // Add new object with type-specific defaults and offset logic
   const addObject = useCallback((typeId = 'box') => {
@@ -141,7 +144,11 @@ function App() {
     <div className="w-full h-screen bg-gray-900 overflow-hidden relative">
       {/* Scene - behind all panels */}
       <div className="w-full h-full absolute inset-0 z-0">
-        <Scene objects={objects} />
+        <Scene 
+          objects={objects} 
+          autoRotate={autoRotate} 
+          autoRotateSpeed={autoRotateSpeed}
+        />
       </div>
       
       {/* Left Panel */}
@@ -162,6 +169,14 @@ function App() {
       <RightPanel 
         object={selectedObject}
         onObjectChange={updateObjectProperty}
+      />
+      
+      {/* Orbit Controls Panel - bottom of screen */}
+      <OrbitControlsPanel 
+        autoRotate={autoRotate}
+        setAutoRotate={setAutoRotate}
+        autoRotateSpeed={autoRotateSpeed}
+        setAutoRotateSpeed={setAutoRotateSpeed}
       />
     </div>
   );
