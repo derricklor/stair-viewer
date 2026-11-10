@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Scene from './components/Scene.jsx';
 import LeftPanel from './components/LeftPanel.jsx';
 import LayersPanel from './components/LayersPanel.jsx';
@@ -44,6 +44,13 @@ function App() {
   const [selectedObjectId, setSelectedObjectId] = useState(1);
   const [autoRotate, setAutoRotate] = useState(false);
   const [autoRotateSpeed, setAutoRotateSpeed] = useState(0.5);
+  const [savedTemplates, setSavedTemplates] = useState([]);
+
+  useEffect(() => {
+    // Load saved templates from localStorage on startup
+    const templates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
+    setSavedTemplates(templates);
+  }, []);
 
   // Add new object with type-specific defaults and offset logic
   const addObject = useCallback((typeId = 'box') => {
@@ -144,12 +151,13 @@ function App() {
     const template = JSON.stringify(objects);
     arrayOfTemplates.push(template);
     localStorage.setItem('stair-viewer-templates', JSON.stringify(arrayOfTemplates));
+    // Update savedTemplates state to trigger re-render
+    setSavedTemplates(arrayOfTemplates);
   }, [objects]);
 
   //directly load the template into objects state
   const loadTemplate = useCallback((template) => {
     setObjects(JSON.parse(template));
-
   }, []);
 
   // Get selected object
@@ -170,6 +178,7 @@ function App() {
       <LeftPanel 
       onAddObject={addObject} 
       onLoadTemplate={loadTemplate}
+      savedTemplates={savedTemplates}
       />
       
       {/* Layers Panel */}

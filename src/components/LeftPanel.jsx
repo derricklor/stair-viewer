@@ -7,7 +7,7 @@ const DEFAULT_SIZE = {
   tread: { width: 1, height: 0.5, depth: 1 },
 };
 
-function LeftPanel({ onAddObject, onLoadTemplate }) {
+function LeftPanel({ onAddObject, onLoadTemplate, savedTemplates = [] }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const componentTypes = [
@@ -23,7 +23,7 @@ function LeftPanel({ onAddObject, onLoadTemplate }) {
     return names[typeId] || 'Box';
   };
 
-  const savedTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
+
 
   return (
     <aside id="left-panel" className="absolute left-0 top-0 h-1/4 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
