@@ -137,6 +137,21 @@ function App() {
     setObjects(newObjects);
   }, [objects, selectedObjectId]);
 
+  //save template
+  const saveTemplate = useCallback(() => {
+    //create a single entry in localstorage using array of object templates
+    const arrayOfTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
+    const template = JSON.stringify(objects);
+    arrayOfTemplates.push(template);
+    localStorage.setItem('stair-viewer-templates', JSON.stringify(arrayOfTemplates));
+  }, [objects]);
+
+  //directly load the template into objects state
+  const loadTemplate = useCallback((template) => {
+    setObjects(JSON.parse(template));
+
+  }, []);
+
   // Get selected object
   const selectedObject = objects.find(obj => obj.id === selectedObjectId);
 
@@ -152,7 +167,10 @@ function App() {
       </div>
       
       {/* Left Panel */}
-      <LeftPanel onAddObject={addObject} />
+      <LeftPanel 
+      onAddObject={addObject} 
+      onLoadTemplate={loadTemplate}
+      />
       
       {/* Layers Panel */}
       <LayersPanel 
@@ -163,6 +181,8 @@ function App() {
         onToggleLock={toggleLock}
         onUpdateProperty={updateObjectProperty}
         onDeleteObject={deleteObject}
+        onSaveTemplate={saveTemplate}
+        
       />
       
       {/* Right Panel */}

@@ -1,4 +1,4 @@
-import { IconPalette, IconEyeOff, IconEye } from './Icon.jsx';
+import { IconPalette, IconEyeOff, IconEye, IconSaveTemplate } from './Icon.jsx';
 
 function RightPanel({ 
   object,
@@ -28,11 +28,17 @@ function RightPanel({
       <div className="p-4 border-b border-gray-700 flex items-center justify-between">
         <h2 className="text-white font-semibold text-lg">Properties</h2>
         <div className="flex items-center gap-2">
-          <button className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-all">
-           
+          <button
+            className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-all"
+            title="Save as Template">
+            <IconSaveTemplate size={18} />
           </button>
-          <button className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-all">
-            
+          <button
+            className="p-2 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-white transition-all"
+            title="Clear Properties">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
           </button>
         </div>
       </div>

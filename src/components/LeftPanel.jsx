@@ -7,7 +7,7 @@ const DEFAULT_SIZE = {
   tread: { width: 1, height: 0.5, depth: 1 },
 };
 
-function LeftPanel({ onAddObject = () => {} }) {
+function LeftPanel({ onAddObject, onLoadTemplate }) {
   const [selectedType, setSelectedType] = useState(null);
 
   const componentTypes = [
@@ -23,12 +23,10 @@ function LeftPanel({ onAddObject = () => {} }) {
     return names[typeId] || 'Box';
   };
 
-  const handleAddObject = (typeId) => {
-    onAddObject(typeId);
-  };
+  const savedTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
 
   return (
-    <aside id="left-panel" className="absolute left-0 top-0 h-1/4 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
+    <aside id="left-panel" className="absolute left-0 top-0 h-1/2 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <h2 className="text-white font-semibold text-lg">Components</h2>
       </div>
@@ -40,7 +38,7 @@ function LeftPanel({ onAddObject = () => {} }) {
               key={type.id}
               onClick={() => {
                 setSelectedType(type.id);
-                handleAddObject(type.id);
+                onAddObject(type.id);
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 selectedType === type.id
@@ -61,7 +59,9 @@ function LeftPanel({ onAddObject = () => {} }) {
         </div>
 
         <div className="mt-8">
-          <h3 className="text-gray-400 text-sm font-medium mb-3">Templates</h3>
+          <h3 className="text-gray-400 text-sm font-medium mb-3">
+            Templates
+          </h3>
           <div className="space-y-2">
             <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white transition-all">
               <IconBox size={18} />
@@ -75,6 +75,19 @@ function LeftPanel({ onAddObject = () => {} }) {
               <IconBox size={18} />
               <span>Residential Stair</span>
             </button>
+            {savedTemplates.map((template, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  onLoadTemplate(template);
+                  setSelectedType(null);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white transition-all"
+              >
+                <IconBox size={18} />
+                <span>Template {index + 1}</span>
+              </button>
+            ))}
           </div>
         </div>
       </div>

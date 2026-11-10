@@ -10,7 +10,8 @@ function LayersPanel({
   onToggleVisibility,
   onToggleLock,
   onUpdateProperty,
-  onDeleteObject
+  onDeleteObject,
+  onSaveTemplate
 }) {
   
 
@@ -20,14 +21,18 @@ function LayersPanel({
   const selectedObject = objects.find(obj => obj.id === effectiveSelectedId);
 
   return (
-    <aside id="layers-panel" className="absolute left-0 top-1/4 h-1/2 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border border-gray-700 flex flex-col">
+    <aside id="layers-panel" className="absolute left-64 top-0 h-1/2 bottom-0 w-56 bg-gray-900/90 backdrop-blur-sm border border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
-        <h2 className="text-white font-semibold text-lg flex items-center gap-2">
-          <IconLayers size={18}/>
-          Layers
-          <div className="right-2 absolute flex items-center gap-2">
-           <IconSaveTemplate size={18} />
-          </div>
+        <h2 className="text-white font-semibold text-lg flex items-center justify-between gap-2">
+          <span className="flex items-center gap-2">
+            <IconLayers size={18}/>
+            Layers
+          </span>
+          <button
+            className="p-1 rounded hover:bg-gray-600 transition-all text-gray-300 hover:text-white"
+            onClick={onSaveTemplate}>
+            <IconSaveTemplate size={18} />
+          </button>
         </h2>
       </div>
 
