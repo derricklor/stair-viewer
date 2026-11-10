@@ -26,7 +26,7 @@ function LeftPanel({ onAddObject, onLoadTemplate }) {
   const savedTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
 
   return (
-    <aside id="left-panel" className="absolute left-0 top-0 h-1/2 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
+    <aside id="left-panel" className="absolute left-0 top-0 h-1/4 w-64 bg-gray-900/90 backdrop-blur-sm border-r border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <h2 className="text-white font-semibold text-lg">Components</h2>
       </div>
