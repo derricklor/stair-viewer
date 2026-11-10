@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconEye, IconEyeOff, IconLock, IconUnlock, IconLayers, IconTrash2, IconPlus } from './Icon.jsx';
+import { IconEye, IconEyeOff, IconLock, IconUnlock, IconLayers, IconTrash2, IconPlus, IconSaveTemplate } from './Icon.jsx';
 
 const layerTypes = ['Mesh', 'Light', 'Camera', 'Group'];
 
@@ -23,8 +23,11 @@ function LayersPanel({
     <aside id="layers-panel" className="absolute left-0 top-1/4 h-1/2 bottom-0 w-64 bg-gray-900/90 backdrop-blur-sm border border-gray-700 flex flex-col">
       <div className="p-4 border-b border-gray-700">
         <h2 className="text-white font-semibold text-lg flex items-center gap-2">
-          <IconLayers size={18} />
+          <IconLayers size={18}/>
           Layers
+          <div className="right-2 absolute flex items-center gap-2">
+           <IconSaveTemplate size={18} />
+          </div>
         </h2>
       </div>
 
