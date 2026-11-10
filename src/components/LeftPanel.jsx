@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { IconPlus, IconBox, IconRiser, IconTread } from './Icon.jsx';
+import { useState, useMemo } from 'react';
+import { IconPlus, IconBox, IconRiser, IconTread, IconTrash2 } from './Icon.jsx';
+
 
 const DEFAULT_SIZE = {
   box: { width: 1, height: 1, depth: 1 },
@@ -7,8 +8,13 @@ const DEFAULT_SIZE = {
   tread: { width: 1, height: 0.5, depth: 1 },
 };
 
-function LeftPanel({ onAddObject, onLoadTemplate, savedTemplates = [] }) {
+function LeftPanel({ onAddObject, onLoadTemplate, savedTemplates = [], deleteTemplate = () => {}, onDeleteTemplate = () => {} }) {
   const [selectedType, setSelectedType] = useState(null);
+
+  // Generate unique keys for templates
+  const getTemplateKey = (template) => {
+    return crypto.randomUUID();
+  };
 
   const componentTypes = [
     { id: 'box', name: 'Box', icon: <IconBox size={18} /> },
@@ -75,19 +81,38 @@ function LeftPanel({ onAddObject, onLoadTemplate, savedTemplates = [] }) {
               <IconBox size={18} />
               <span>Residential Stair</span>
             </button>
-            {savedTemplates.map((template, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  onLoadTemplate(template);
-                  setSelectedType(null);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white transition-all"
-              >
-                <IconBox size={18} />
-                <span>Template {index + 1}</span>
-              </button>
-            ))}
+            {savedTemplates.map((template, index) => {
+              const templateKey = getTemplateKey(template);
+              const templateName = savedTemplates[index] ? 'Template ' + (index + 1) : 'Unknown';
+              
+              const handleDelete = (templateIndex) => {
+                // Remove from localStorage
+                const updatedTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
+                updatedTemplates.splice(templateIndex, 1);
+                localStorage.setItem('stair-viewer-templates', JSON.stringify(updatedTemplates));
+                // Update state
+                const newTemplates = [...savedTemplates];
+                newTemplates.splice(templateIndex, 1);
+                onDeleteTemplate(newTemplates);
+              };
+              
+              return (
+                <div
+                  key={templateKey}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white transition-all group"
+                >
+                  <IconBox size={18} />
+                  <span className="flex-1">{templateName}</span>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="p-1 rounded hover:bg-red-600 transition-all text-gray-400 hover:text-white opacity-0 group-hover:opacity-100"
+                    title="Delete Template"
+                  >
+                    <IconTrash2 size={14} />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

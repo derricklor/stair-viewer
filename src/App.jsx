@@ -160,6 +160,20 @@ function App() {
     setObjects(JSON.parse(template));
   }, []);
 
+  // Delete a template by index
+  const deleteTemplate = useCallback((templateIndex) => {
+    const updatedTemplates = JSON.parse(localStorage.getItem('stair-viewer-templates')) || [];
+    updatedTemplates.splice(templateIndex, 1);
+    localStorage.setItem('stair-viewer-templates', JSON.stringify(updatedTemplates));
+    // Update state
+    setSavedTemplates(updatedTemplates);
+  }, []);
+
+  // Callback to update savedTemplates state
+  const handleDeleteTemplate = useCallback((newTemplates) => {
+    setSavedTemplates(newTemplates);
+  }, []);
+
   // Get selected object
   const selectedObject = objects.find(obj => obj.id === selectedObjectId);
 
@@ -179,6 +193,8 @@ function App() {
       onAddObject={addObject} 
       onLoadTemplate={loadTemplate}
       savedTemplates={savedTemplates}
+      deleteTemplate={deleteTemplate}
+      onDeleteTemplate={handleDeleteTemplate}
       />
       
       {/* Layers Panel */}
